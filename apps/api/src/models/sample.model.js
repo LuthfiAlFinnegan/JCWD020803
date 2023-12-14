@@ -8,6 +8,7 @@ export default class Sample extends Model {
    */
   static associate(models) {
     // define association here
+    Sample.hasMany(models.RelatedModel);
   }
 }
 
