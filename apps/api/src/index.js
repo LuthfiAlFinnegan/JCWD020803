@@ -49,24 +49,30 @@ const globalAPIErrorHandler = (app) => {
 /**
  * Main function of API project
  */
-const main = () => {
-  DB.initialize();
+ const main = async () => {
+  try {
+    await DB.initialize();
 
-  const app = express();
-  app.use(cors());
-  app.use(json());
-  app.use('/api', router);
+    const app = express();
+    app.use(cors());
+    app.use(json());
+    app.use('/api', router);
 
-  globalAPIErrorHandler(app);
-  serveWebProjectBuildResult(app);
+    globalAPIErrorHandler(app);
+    serveWebProjectBuildResult(app);
 
-  app.listen(PORT, (err) => {
-    if (err) {
-      console.log(`ERROR: ${err}`);
-    } else {
-      console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
-    }
-  });
+    // await DB.sequelize.sync({ alter: true });
+
+    app.listen(PORT, (err) => {
+      if (err) {
+        console.log(`ERROR: ${err}`);
+      } else {
+        console.log(`  ➜  [API] Local:   http://localhost:${PORT}/`);
+      }
+    });
+  } catch (error) {
+    console.error('Error during initialization:', error);
+  }
 };
 
 main();
